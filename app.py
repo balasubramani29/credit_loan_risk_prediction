@@ -191,8 +191,7 @@ st.sidebar.header("✍ Enter Customer Details")
 inputs = {}
 
 for col in data.columns[:-1]:
-    st.write(col, data[col].dtype)
-    if data[col].dtype == "object" or data[col].astype(str).str.isalpha().any():
+    if col in encoders:
         inputs[col] = st.sidebar.selectbox(
             col,
             data[col].astype(str).unique()
@@ -200,11 +199,8 @@ for col in data.columns[:-1]:
     else:
         inputs[col] = st.sidebar.number_input(
             col,
-            min_value=float(data[col].min()),
-            max_value=float(data[col].max()),
             value=float(data[col].mean())
         )
-
 input_df = pd.DataFrame([inputs])
 
 
