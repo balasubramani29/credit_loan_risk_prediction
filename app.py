@@ -209,16 +209,15 @@ input_df = pd.DataFrame([inputs])
 
 
 # encode
-test = input_df.copy()
+test = pd.get_dummies(input_df, drop_first=True)
 
-for col in test.columns:
-    if col in encoders:
-        value = str(test[col].iloc[0])
-        test[col] = encoders[col].transform([value])
-
-# Make columns exactly match training data
-test = test[X.columns]
-
+# Make test have exactly the same columns as X
+test = test.reindex(columns=X.columns, fill_value=0)
 if st.sidebar.button("Predict Credit Risk"):
     pred = model.predict(test)[0]
     prob = model.predict_proba(test)[0][1]
+
+    if pred == 1:
+        st.sidebar.error(f"⚠ High Risk ({prob*100:.2f}%)")
+    else:
+        st.sidebar.success(f"✅ Low Risk ({(1-prob)*100:.2f}%)")
