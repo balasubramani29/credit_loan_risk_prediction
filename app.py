@@ -107,7 +107,7 @@ df.iloc[:, -1] = target
 # =========================================================
 # TRAIN MODEL
 # =========================================================
-X = df.iloc[:, :-1]
+X = pd.get_dummies(data.iloc[:, :-1], drop_first=True)
 y = df.iloc[:, -1]
 
 X_train, X_test, y_train, y_test = train_test_split(
@@ -115,6 +115,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 model = RandomForestClassifier(n_estimators=200)
+st.write("Object columns:", X.select_dtypes(include="object").columns.tolist())
 model.fit(X_train, y_train)
 
 preds = model.predict(X_test)
