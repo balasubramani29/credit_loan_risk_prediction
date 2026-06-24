@@ -76,15 +76,14 @@ def preprocess(df):
     df = df.copy()
     encoders = {}
 
+    
+
     for col in df.columns:
-    if df[col].dtype == "object":
-        le = LabelEncoder()
-
-        # Convert values to string and handle missing values
-        df[col] = df[col].fillna("Unknown").astype(str)
-
-        df[col] = le.fit_transform(df[col])
-        encoders[col] = le
+        if df[col].dtype == "object":
+            le = LabelEncoder()
+            df[col] = df[col].fillna("Unknown").astype(str)
+            df[col] = le.fit_transform(df[col])
+            encoders[col] = le
 
     return df, encoders
 
