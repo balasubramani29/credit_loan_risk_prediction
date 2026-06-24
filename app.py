@@ -210,16 +210,15 @@ input_df = pd.DataFrame([inputs])
 
 # encode
 test = input_df.copy()
+
 for col in test.columns:
     if col in encoders:
-        test[col] = encoders[col].transform(test[col])
+        value = str(test[col].iloc[0])
+        test[col] = encoders[col].transform([value])
 
+# Make columns exactly match training data
+test = test[X.columns]
 
 if st.sidebar.button("Predict Credit Risk"):
     pred = model.predict(test)[0]
     prob = model.predict_proba(test)[0][1]
-
-    if pred == 1:
-        st.sidebar.error(f"⚠ High Risk ({prob*100:.2f}%)")
-    else:
-        st.sidebar.success(f"✅ Low Risk ({(1-prob)*100:.2f}%)")
