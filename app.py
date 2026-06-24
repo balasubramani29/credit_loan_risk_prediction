@@ -191,7 +191,8 @@ st.sidebar.header("✍ Enter Customer Details")
 inputs = {}
 
 for col in data.columns[:-1]:
-    if col in encoders:
+    st.write(col, data[col].dtype)
+    if data[col].dtype == "object" or data[col].astype(str).str.isalpha().any():
         inputs[col] = st.sidebar.selectbox(
             col,
             data[col].astype(str).unique()
