@@ -191,15 +191,19 @@ st.sidebar.header("✍ Enter Customer Details")
 inputs = {}
 
 for col in data.columns[:-1]:
-    if col in encoders:
-        inputs[col] = st.sidebar.selectbox(
-            col,
-            data[col].astype(str).unique()
-        )
-    else:
+
+    # Check if column is numeric
+    if pd.api.types.is_numeric_dtype(data[col]):
         inputs[col] = st.sidebar.number_input(
             col,
             value=float(data[col].mean())
+        )
+
+    # Otherwise treat it as categorical
+    else:
+        inputs[col] = st.sidebar.selectbox(
+            col,
+            data[col].astype(str).unique()
         )
 input_df = pd.DataFrame([inputs])
 
